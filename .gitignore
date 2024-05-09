@@ -1,2 +1,10 @@
+node_modules
+build
 
-.env.dev
+# environment
+.env
+.env.*
+
+# config IDE
+.vscode
+.idea
