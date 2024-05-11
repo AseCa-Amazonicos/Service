@@ -1,4 +1,4 @@
-import {Cart} from '../../src/service/Cart';
+import {Cart, ProductInCart} from '../../src/service/Cart';
 import {Product} from '../../src/service/Product';
 
 test('create cart', () => {
@@ -40,4 +40,6 @@ test('add different type of products', () => {
     cart.AddProduct(new Product('aaaaaaaaaaaaa'));
     cart.RemoveProduct(new Product('fqwiemfvp424r'));
     expect(cart.IsEmpty()).toBeFalsy();
+    const firsProduct = cart.ProductsInCart().next().value as ProductInCart;
+    expect(firsProduct.product.id === 'aaaaaaaaaaaaa').toBeTruthy();
 });

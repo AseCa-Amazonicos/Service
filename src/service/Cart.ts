@@ -1,11 +1,11 @@
 import {Product} from './Product';
 
 export class Cart {
-    private readonly products: Map<string, ProductInfo>; //id, info
+    private readonly products: Map<string, ProductInCart>; //id, info
 
-    constructor(products?: Map<string, ProductInfo>) {
+    constructor(products?: Map<string, ProductInCart>) {
         if (products === undefined)
-            this.products = new Map<string, ProductInfo>();
+            this.products = new Map<string, ProductInCart>();
         else this.products = products;
     }
 
@@ -37,9 +37,13 @@ export class Cart {
         }
         this.products.delete(product.id);
     }
+
+    ProductsInCart(): IterableIterator<ProductInCart> {
+        return this.products.values();
+    }
 }
 
-interface ProductInfo {
+export interface ProductInCart {
     product: Product;
     amount: number;
 }
