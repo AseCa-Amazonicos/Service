@@ -26,3 +26,18 @@ test('add same product 2 times', () => {
     cart.RemoveProduct(new Product('fqwiemfvp424r'));
     expect(cart.IsEmpty()).toBeFalsy();
 });
+
+test('remove not existent product', () => {
+    const cart = new Cart();
+    cart.AddProduct(new Product('fqwiemfvp424r'));
+    cart.RemoveProduct(new Product('fjsakfjl'));
+    expect(cart.IsEmpty()).toBeFalsy();
+});
+
+test('add different type of products', () => {
+    const cart = new Cart();
+    cart.AddProduct(new Product('fqwiemfvp424r'));
+    cart.AddProduct(new Product('aaaaaaaaaaaaa'));
+    cart.RemoveProduct(new Product('fqwiemfvp424r'));
+    expect(cart.IsEmpty()).toBeFalsy();
+});

@@ -30,10 +30,7 @@ export class Cart {
     RemoveProduct(product: Product) {
         if (!this.products.has(product.id)) return;
         const info = this.products.get(product.id);
-        if (info === undefined) {
-            this.products.delete(product.id);
-            return;
-        }
+        if (info === undefined) return;
         if (info.amount > 1) {
             this.products.set(product.id, {product, amount: info.amount - 1});
             return;
