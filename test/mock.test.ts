@@ -1,5 +1,3 @@
-describe('dummy', () => {
-    it('it', () => {
-        expect(true).toEqual(true);
-    });
+test('dummy', () => {
+    expect(true).toEqual(true);
 });
