@@ -1,31 +1,17 @@
-import {ProductOrder} from './dto/product.order';
-import {ProductCart} from './dto/product.cart';
 import { createOrder, getStock } from './controlTower/ControlTower';
 
 const cart = [];
 
-async function listProducts() {
-    const productList = document.getElementById('product-list'); // on html, product-list is the id of the div
-
-    if (productList) {
-        productList.innerHTML = ''; // Clear any existing content
-
-        const products = await getStock();
-
-        products.forEach(product => {
-            const productDiv = document.createElement('div');
-            productDiv.className = 'product';
-            productDiv.innerHTML = `
-                <span>${product.itemName}</span>
-                <span>Stock: ${product.quantity}</span>
-                <button onclick="addToCart(${product.productId})">Agregar al Carrito</button>
-            `;
-            productList.appendChild(productDiv);
-        });
+export async function listProducts() {
+    try {
+        return await getStock(); // Assuming your API response has a "products" key
+    } catch (error) {
+        console.error('Error listing products:', error);
+        throw error; // Rethrow the error so it can be caught by the caller
     }
 }
 
-export async function addToCart(productId) {
+export async function addToCart(productId, cart) {
     const products = await getStock();
     const product = products.find(p => p.productId === productId);
     if (!product) {
@@ -50,10 +36,10 @@ export async function addToCart(productId) {
         else console.log(`No more stock available for ${product.itemName}`);
     }
 
-    listCartItems();
+    return cart
 }
 
-function listCartItems() {
+export function listCartItems(cart) {
     const cartList = document.getElementById('cart-list');
 
     if (cartList) {
@@ -65,40 +51,38 @@ function listCartItems() {
             cartItemDiv.innerHTML = `
                 <span>${item.name}</span>
                 <span>Cantidad: ${item.quantity}</span>
-                <button onclick="removeFromCart(${item.productId})">Eliminar</button>
+                <button onClick={() => removeFromCart(${item.productId}, cart)}>Eliminar</button>
             `;
             cartList.appendChild(cartItemDiv);
         });
     }
 }
 
-function removeFromCart(productId) {
+export function removeFromCart(productId, cart) {
     const cartIndex = cart.findIndex(item => item.productId === productId);
     if (cartIndex > -1) {
         cart.splice(cartIndex, 1);
-        listCartItems();
+        return cart
     }
 }
 
-function transformCartToOrder(){
+export function transformCartToOrder(cart){
     return cart.map(prodCart => getProdOrder(prodCart));
 }
 
-function getProdOrder(prodCart) {
+export function getProdOrder(prodCart) {
     return {
         productId: prodCart.productId,
         quantity: prodCart.quantity,
     };
 }
 
-export async function buyItems() {
+export async function buyItems(cart) {
     const checkoutButton = document.getElementById('checkout-button');
     if (checkoutButton) {
         await listProducts();
-        await createOrder(transformCartToOrder());
-        for (let i = 0; i < cart.length; i++) {
-            removeFromCart(cart[i].productId);
-        }
+        await createOrder(transformCartToOrder(cart));
+        return true
     }
 }
 
