@@ -65,7 +65,7 @@ function App() {
                             <div key={product.productId} className="cart-item">
                                 <span>{product.itemName}</span>
                                 <span>Cantidad máxima: {product.quantity}</span>
-                                <button onClick={() => fetchAddToCart(product.productId)}>Add to Cart</button>
+                                <button className='button-add-item-to-cart' onClick={() => fetchAddToCart(product.productId)}>Add to Cart</button>
                             </div>
                         ))}
                     </div>
