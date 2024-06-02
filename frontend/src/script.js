@@ -1,7 +1,5 @@
 import { createOrder, getStock } from './controlTower/ControlTower';
 
-const cart = [];
-
 export async function listProducts() {
     try {
         return await getStock(); // Assuming your API response has a "products" key
@@ -80,10 +78,26 @@ export function getProdOrder(prodCart) {
 export async function buyItems(cart) {
     const checkoutButton = document.getElementById('checkout-button');
     if (checkoutButton) {
+        const isStockAvailable = await quantityCheck(cart);
+        if (!isStockAvailable) {
+            alert("No more stock available. Please check your products");
+            return false;
+        }
         await listProducts();
         await createOrder(transformCartToOrder(cart));
-        return true
+        return true;
     }
+}
+
+async function quantityCheck(cart) {
+    const products = await getStock();
+    for (let item of cart) {
+        const product = products.find(p => p.productId === item.productId);
+        if (item.quantity > product.quantity) {
+            return false;
+        }
+    }
+    return true;
 }
 
 // Call the listProducts function to initially populate the product list

@@ -1,7 +1,7 @@
 import "./styles.css";
 
-import React, { useEffect, useState } from "react";
-import { addToCart, buyItems, listProducts, removeFromCart} from "./script.js";
+import React, {useEffect, useState} from "react";
+import {addToCart, buyItems, listProducts, removeFromCart} from "./script.js";
 
 function App() {
     const [products, setProducts] = useState([]);
@@ -24,7 +24,7 @@ function App() {
 
     const fetchAddToCart = async (productId) => {
         try {
-            const updatedCart = await addToCart(productId, cart);
+            await addToCart(productId, cart);
             setCart(prevCart => [...prevCart]);
         } catch (error) {
             console.error("Error adding to cart:", error);
@@ -42,13 +42,13 @@ function App() {
     }
 
     const handleRemoveFromCart = (productId) => {
-        const updatedCart = removeFromCart(productId, cart);
+        removeFromCart(productId, cart);
         setCart(prevCart => [...prevCart]);
     };
+
     const handleBuyItems = () => {
         const updatedCart = buyItems(cart);
         if(updatedCart) setCart([]);
-
         fetchProducts()
     };
 
@@ -65,7 +65,9 @@ function App() {
                             <div key={product.productId} className="cart-item">
                                 <span>{product.itemName}</span>
                                 <span>Cantidad máxima: {product.quantity}</span>
-                                <button className='button-add-item-to-cart' onClick={() => fetchAddToCart(product.productId)}>Add to Cart</button>
+                                <button className='button-add-item-to-cart'
+                                        onClick={() => fetchAddToCart(product.productId)}>Add to Cart
+                                </button>
                             </div>
                         ))}
                     </div>
